@@ -1,41 +1,87 @@
 import React from 'react'
-
+import axios from 'axios'
 
 export default class AppClass extends React.Component {
 
   state = {
-    grid: { 'x': 2, 'y': 2 }
+    grid: { 'x': 2, 'y': 2 },
+    counter: 0,
+    message: '',
+    email: ''
+  }
+
+  onSubmit = event => {
+    event.preventDefualt()
+    const payload = {
+      'x': this.state.grid.x,
+      'y': this.state.grid.y,
+      'steps': this.state.counter,
+      'email': this.state.email
+    };
+    axios.post('http://localhost:9000/api/result', payload)
+      .then(res => {
+        this.setState({ ...this.state, message: res.data.message })
+        this.setState({ ...this.state, email: '' })
+      })
+      .catch(err => {
+        this.setState({ ...this.state, message: err.response.data.message })
+      })
+  }
+
+  onChange = event => {
+    const { value } = event.target
+    this.setState({ ...this.state, email: value })
   }
 
   moveUp = () => {
     if(this.state.grid.y > 1) {
       this.setState({ ...this.state,
-        grid: { ...this.state.grid, y: this.state.grid.y - 1 }
+        grid: { ...this.state.grid, y: this.state.grid.y - 1 },
+        counter: this.state.counter + 1,
+        message: ''
       })
+    }
+    else {
+      this.setState({ ...this.state, message: "You can't go up" })
     }
   }
 
   moveDown = () => {
     if(this.state.grid.y < 3) {
       this.setState({ ...this.state,
-        grid: { ...this.state.grid, y: this.state.grid.y + 1 }
+        grid: { ...this.state.grid, y: this.state.grid.y + 1 },
+        counter: this.state.counter + 1,
+        message: ''
       })
+    }
+    else {
+      this.setState({ ...this.state, message: "You can't go down" })
     }
   }
   
   moveLeft = () => {
     if(this.state.grid.x > 1) {
       this.setState({ ...this.state,
-        grid: { ...this.state.grid, x: this.state.grid.x - 1 }
+        grid: { ...this.state.grid, x: this.state.grid.x - 1 },
+        counter: this.state.counter + 1,
+        message: ''
       })
+    }
+    else {
+      this.setState({ ...this.state, message: "You can't go left" })
     }
   }
   
   moveRight = () => {
     if(this.state.grid.x < 3) {
       this.setState({ ...this.state,
-        grid: { ...this.state.grid, x: this.state.grid.x + 1 }
+        grid: { ...this.state.grid, x: this.state.grid.x + 1 },
+        counter: this.state.counter + 1,
+        message: ''
       })
+    }
+    else {
+      this.setState({ ...this.state, message: "You can't go right" })
     }
   }
 
@@ -45,7 +91,7 @@ export default class AppClass extends React.Component {
       <div id="wrapper" className={className}>
         <div className="info">
           <h3 id="coordinates">{`Coordinates (${this.state.grid.x}, ${this.state.grid.y})`}</h3>
-          <h3 id="steps">You moved 0 times</h3>
+          <h3 id="steps">You moved {this.state.counter} times</h3>
         </div>
         <div id="grid">
           <div className={`${this.state.grid.x == 1 && this.state.grid.y == 1 ? 'square active' : 'square'}`}>{this.state.grid.x === 1 && this.state.grid.y === 1 ? 'B' : ''}</div>
@@ -59,7 +105,7 @@ export default class AppClass extends React.Component {
           <div className={`${this.state.grid.x == 3 && this.state.grid.y == 3 ? 'square active' : 'square'}`}>{this.state.grid.x === 3 && this.state.grid.y === 3 ? 'B' : ''}</div>
         </div>
         <div className="info">
-          <h3 id="message"></h3>
+          <h3 id="message">{this.state.message}</h3>
         </div>
         <div id="keypad">
           <button onClick={this.moveLeft} id="left">LEFT</button>
