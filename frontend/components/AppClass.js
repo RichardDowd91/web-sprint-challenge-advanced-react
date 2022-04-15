@@ -6,19 +6,23 @@ export default class AppClass extends React.Component {
   state = {
     grid: { 'x': 2, 'y': 2 },
     counter: 0,
-    message: ''
+    message: '',
+    email: ''
   }
 
   onSubmit = event => {
-    event.preventDefualt()
-    const payload = {
+    event.preventDefault()
+    const payloadToSend = {
       'x': this.state.grid.x,
       'y': this.state.grid.y,
-      'steps': this.state.counter
+      'steps': this.state.counter,
+      'email': this.state.email
     };
-    axios.post('http://localhost:9000/api/result', payload)
-      .then(res => {
+    axios.post('http://localhost:9000/api/result', payloadToSend)
+    .then(res => {
+        console.log(this.state.email);
         this.setState({ ...this.state, message: res.data.message })
+        this.setState({ ...this.state, email: '' })
       })
       .catch(err => {
         this.setState({ ...this.state, message: err.response.data.message })
@@ -108,11 +112,11 @@ export default class AppClass extends React.Component {
           <button onClick={this.moveLeft} id="left">LEFT</button>
           <button onClick={this.moveUp} id="up">UP</button>
           <button onClick={this.moveRight} id="right">RIGHT</button>
-          <button  onClick={this.moveDown} id="down">DOWN</button>
-          <button id="reset">reset</button>
+          <button onClick={this.moveDown} id="down">DOWN</button>
+          <button onClick={() => {this.setState({ ...this.state, counter: 0, grid: {'x': 2, 'y':2}, message: '', email: '' })}} id="reset">reset</button>
         </div>
-        <form>
-          <input id="email" type="email" placeholder="type email"></input>
+        <form onSubmit={this.onSubmit}>
+          <input onChange={this.onChange} value={this.state.email} id="email" type="email" placeholder="type email"></input>
           <input id="submit" type="submit"></input>
         </form>
       </div>
