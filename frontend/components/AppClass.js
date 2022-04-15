@@ -9,6 +9,11 @@ export default class AppClass extends React.Component {
     message: '',
     email: ''
   }
+  
+  onChange = event => {
+    const { value } = event.target
+    this.setState({ ...this.state, email: value })
+  }
 
   onSubmit = event => {
     event.preventDefault()
@@ -27,11 +32,6 @@ export default class AppClass extends React.Component {
       .catch(err => {
         this.setState({ ...this.state, message: err.response.data.message })
       })
-  }
-
-  onChange = event => {
-    const { value } = event.target
-    this.setState({ ...this.state, email: value })
   }
 
   moveUp = () => {
