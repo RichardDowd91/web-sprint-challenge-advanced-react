@@ -6,8 +6,7 @@ export default class AppClass extends React.Component {
   state = {
     grid: { 'x': 2, 'y': 2 },
     counter: 0,
-    message: '',
-    email: ''
+    message: ''
   }
 
   onSubmit = event => {
@@ -15,13 +14,11 @@ export default class AppClass extends React.Component {
     const payload = {
       'x': this.state.grid.x,
       'y': this.state.grid.y,
-      'steps': this.state.counter,
-      'email': this.state.email
+      'steps': this.state.counter
     };
     axios.post('http://localhost:9000/api/result', payload)
       .then(res => {
         this.setState({ ...this.state, message: res.data.message })
-        this.setState({ ...this.state, email: '' })
       })
       .catch(err => {
         this.setState({ ...this.state, message: err.response.data.message })
