@@ -73,7 +73,7 @@ export default function AppFunctional(props) {
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">Coordinates ({grid.x}, {grid.y})</h3>
-        <h3 id="steps">You moved {counter} times</h3>
+        <h3 id="steps">You moved {counter} {counter === 1 ? 'time' : 'times'}</h3>
       </div>
       <div id="grid">
         <div className={`${grid.x == 1 && grid.y == 1 ? 'square active' : 'square'}`}>{grid.x === 1 && grid.y === 1 ? 'B' : ''}</div>

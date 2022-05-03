@@ -27,11 +27,11 @@ export default class AppClass extends React.Component {
     .then(res => {
         console.log(this.state.email);
         this.setState({ ...this.state, message: res.data.message })
-        this.setState({ ...this.state, email: '' })
       })
       .catch(err => {
         this.setState({ ...this.state, message: err.response.data.message })
       })
+      this.setState({ ...this.state, email: '' })
   }
 
   moveUp = () => {
@@ -92,7 +92,7 @@ export default class AppClass extends React.Component {
       <div id="wrapper" className={className}>
         <div className="info">
           <h3 id="coordinates">{`Coordinates (${this.state.grid.x}, ${this.state.grid.y})`}</h3>
-          <h3 id="steps">You moved {this.state.counter} times</h3>
+          <h3 id="steps">You moved {this.state.counter} {this.state.counter === 1 ? 'time' : 'times'}</h3>
         </div>
         <div id="grid">
           <div className={`${this.state.grid.x == 1 && this.state.grid.y == 1 ? 'square active' : 'square'}`}>{this.state.grid.x === 1 && this.state.grid.y === 1 ? 'B' : ''}</div>
